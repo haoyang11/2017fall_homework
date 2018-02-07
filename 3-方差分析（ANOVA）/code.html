@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0064)file:///C:/Users/hao-yang/Documents/MATLAB/hw1/html/bigdata.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>bigdata</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-20"><meta name="DC.source" content="bigdata.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="file:///C:/Users/hao-yang/Documents/MATLAB/hw1/html/bigdata.html#2">画出密度分布并进行正态检验</a></li><li><a href="file:///C:/Users/hao-yang/Documents/MATLAB/hw1/html/bigdata.html#3">分别对各组进行正态检验</a></li><li><a href="file:///C:/Users/hao-yang/Documents/MATLAB/hw1/html/bigdata.html#4">重新选择三列数据进行分析</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>;
+clear <span class="string">all</span>;
+clc;
+
+[NUM,TXT,RAW]=xlsread(<span class="string">'data.xlsx'</span>);
+Category=NUM(:,2);
+AGE=NUM(:,7);
+</pre><h2 id="2">画出密度分布并进行正态检验</h2><pre class="codeinput">m=40;
+[a,b]=hist(AGE,m);
+bar(b,a,<span class="string">'FaceColor'</span>,<span class="string">'r'</span>,<span class="string">'EdgeColor'</span>,<span class="string">'w'</span>);box <span class="string">off</span>
+hold <span class="string">on</span>
+[f,x] = ksdensity(AGE);
+a2=axes;
+plot(x,f)
+set(a2,<span class="string">'box'</span>,<span class="string">'off'</span>,<span class="string">'yaxislocation'</span>,<span class="string">'right'</span>,<span class="string">'color'</span>,<span class="string">'none'</span>,<span class="string">'xtick'</span>,[])
+title( <span class="string">'频数直方图与密度分布函数'</span>);
+
+alpha=0.05;
+[mu,sigma]=normfit(AGE);<span class="comment">% 估计正态参数</span>
+p1=normcdf(AGE,mu,sigma);<span class="comment">% 作累积分布x</span>
+[H1,s1]=kstest(AGE,[AGE,p1],alpha);<span class="comment">%ks检验</span>
+</pre><img vspace="5" hspace="5" src="./bigdata_files/bigdata_01.png" alt=""> <h2 id="3">分别对各组进行正态检验</h2><pre class="codeinput">alpha=0.05;
+<span class="keyword">for</span> i=1:5
+    idx=find(Category==i);
+    testdata=AGE(idx);
+    [mu,sigma]=normfit(testdata);<span class="comment">% 估计正态参数</span>
+    p1=normcdf(testdata,mu,sigma);<span class="comment">% 作累积分布x</span>
+    [H1,s1]=kstest(testdata,[testdata,p1],alpha);<span class="comment">%ks检验</span>
+    <span class="keyword">if</span>(H1==1)
+       disp([<span class="string">'第'</span>,num2str(i),<span class="string">'类拒绝正态分布假设;'</span>]);
+    <span class="keyword">else</span>
+       disp([<span class="string">'第'</span>,num2str(i),<span class="string">'类不拒绝正态分布假设;'</span>]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+p = vartestn(AGE,Category) <span class="comment">% 进行方差齐性检验</span>
+<span class="keyword">if</span>(p&lt;alpha)
+   disp([<span class="string">'不满足方差齐性'</span>]);
+<span class="keyword">end</span>
+
+ p=anova1(AGE,Category) <span class="comment">% 进行单因素方差分析</span>
+<span class="keyword">if</span>(p&lt;alpha)
+   disp([<span class="string">'拒绝H0假设'</span>]);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">第1类不拒绝正态分布假设;
+第2类不拒绝正态分布假设;
+第3类不拒绝正态分布假设;
+第4类拒绝正态分布假设;
+第5类拒绝正态分布假设;
+p =
+   1.3878e-58
+不满足方差齐性
+p =
+  1.0821e-126
+拒绝H0假设
+</pre><img vspace="5" hspace="5" src="./bigdata_files/bigdata_02.png" alt=""> <img vspace="5" hspace="5" src="./bigdata_files/bigdata_03.png" alt=""> <img vspace="5" hspace="5" src="./bigdata_files/bigdata_04.png" alt=""> <img vspace="5" hspace="5" src="./bigdata_files/bigdata_05.png" alt=""> <h2 id="4">重新选择三列数据进行分析</h2><pre class="codeinput">RD=NUM(:,5);<span class="comment">%稠密度</span>
+SR=NUM(:,9);<span class="comment">%性别比</span>
+VA=NUM(:,8);<span class="comment">%年龄差</span>
+
+data=log(VA);<span class="comment">% 修改数据源</span>
+m=40;
+[a,b]=hist(data,m);
+bar(b,a,<span class="string">'FaceColor'</span>,<span class="string">'r'</span>,<span class="string">'EdgeColor'</span>,<span class="string">'w'</span>);box <span class="string">off</span>
+hold <span class="string">on</span>
+[f,x] = ksdensity(data);
+a2=axes;
+plot(x,f)
+set(a2,<span class="string">'box'</span>,<span class="string">'off'</span>,<span class="string">'yaxislocation'</span>,<span class="string">'right'</span>,<span class="string">'color'</span>,<span class="string">'none'</span>,<span class="string">'xtick'</span>,[])
+title( <span class="string">'年龄差频数直方图与密度分布函数'</span>);
+
+AGE=data;
+alpha=0.05;
+<span class="keyword">for</span> i=1:5
+    idx=find(Category==i);
+    testdata=AGE(idx);
+    [mu,sigma]=normfit(testdata);<span class="comment">% 估计正态参数</span>
+    p1=normcdf(testdata,mu,sigma);<span class="comment">% 作累积分布x</span>
+    [H1,s1]=kstest(testdata,[testdata,p1],alpha);<span class="comment">%ks检验</span>
+    <span class="keyword">if</span>(H1==1)
+       disp([<span class="string">'第'</span>,num2str(i),<span class="string">'类拒绝正态分布假设;'</span>]);
+    <span class="keyword">else</span>
+       disp([<span class="string">'第'</span>,num2str(i),<span class="string">'类不拒绝正态分布假设;'</span>]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+p = vartestn(AGE,Category) <span class="comment">% 进行方差齐性检验</span>
+<span class="keyword">if</span>(p&lt;alpha)
+   disp([<span class="string">'不满足方差齐性'</span>]);
+<span class="keyword">end</span>
+
+ p=anova1(AGE,Category) <span class="comment">% 进行单因素方差分析</span>
+<span class="keyword">if</span>(p&lt;alpha)
+   disp([<span class="string">'拒绝H0假设'</span>]);
+<span class="keyword">end</span>
+
+
+
+
+<span class="comment">% data=AGE;</span>
+<span class="comment">% [mu,sigma]=normfit(data);</span>
+<span class="comment">% [y,x]=hist(data,35);</span>
+<span class="comment">% bar(x,y,'FaceColor','r','EdgeColor','w');box off</span>
+<span class="comment">% xlim([mu-3*sigma,mu+3*sigma])</span>
+<span class="comment">% a2=axes;</span>
+<span class="comment">% ezplot(@(x)normpdf(x,mu,sigma),[mu-3*sigma,mu+3*sigma])</span>
+<span class="comment">% set(a2,'box','off','yaxislocation','right','color','none')</span>
+<span class="comment">% title( '频数直方图与密度函数');</span>
+</pre><pre class="codeoutput">第1类拒绝正态分布假设;
+第2类拒绝正态分布假设;
+第3类不拒绝正态分布假设;
+第4类拒绝正态分布假设;
+第5类拒绝正态分布假设;
+p =
+  4.1215e-130
+不满足方差齐性
+p =
+  2.9806e-202
+拒绝H0假设
+</pre><img vspace="5" hspace="5" src="./bigdata_files/bigdata_06.png" alt=""> <img vspace="5" hspace="5" src="./bigdata_files/bigdata_07.png" alt=""> <img vspace="5" hspace="5" src="./bigdata_files/bigdata_08.png" alt=""> <img vspace="5" hspace="5" src="./bigdata_files/bigdata_09.png" alt=""> <img vspace="5" hspace="5" src="./bigdata_files/bigdata_10.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB® R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all;
+clear all;
+clc;
+
+[NUM,TXT,RAW]=xlsread('data.xlsx');
+Category=NUM(:,2);
+AGE=NUM(:,7);
+
+%%  画出密度分布并进行正态检验
+m=40;
+[a,b]=hist(AGE,m);
+bar(b,a,'FaceColor','r','EdgeColor','w');box off
+hold on
+[f,x] = ksdensity(AGE);
+a2=axes;
+plot(x,f)
+set(a2,'box','off','yaxislocation','right','color','none','xtick',[])
+title( '频数直方图与密度分布函数');
+
+alpha=0.05;
+[mu,sigma]=normfit(AGE);% 估计正态参数
+p1=normcdf(AGE,mu,sigma);% 作累积分布x
+[H1,s1]=kstest(AGE,[AGE,p1],alpha);%ks检验
+
+
+%% 分别对各组进行正态检验
+alpha=0.05;
+for i=1:5
+    idx=find(Category==i);
+    testdata=AGE(idx);
+    [mu,sigma]=normfit(testdata);% 估计正态参数
+    p1=normcdf(testdata,mu,sigma);% 作累积分布x
+    [H1,s1]=kstest(testdata,[testdata,p1],alpha);%ks检验
+    if(H1==1)
+       disp(['第',num2str(i),'类拒绝正态分布假设;']);
+    else
+       disp(['第',num2str(i),'类不拒绝正态分布假设;']);
+    end
+end
+p = vartestn(AGE,Category) % 进行方差齐性检验
+if(p<alpha)
+   disp(['不满足方差齐性']);
+end
+
+ p=anova1(AGE,Category) % 进行单因素方差分析
+if(p<alpha)
+   disp(['拒绝H0假设']);
+end
+
+
+
+%% 重新选择三列数据进行分析
+
+RD=NUM(:,5);%稠密度
+SR=NUM(:,9);%性别比
+VA=NUM(:,8);%年龄差
+
+data=log(VA);% 修改数据源
+m=40;
+[a,b]=hist(data,m);
+bar(b,a,'FaceColor','r','EdgeColor','w');box off
+hold on
+[f,x] = ksdensity(data);
+a2=axes;
+plot(x,f)
+set(a2,'box','off','yaxislocation','right','color','none','xtick',[])
+title( '年龄差频数直方图与密度分布函数');
+
+AGE=data;
+alpha=0.05;
+for i=1:5
+    idx=find(Category==i);
+    testdata=AGE(idx);
+    [mu,sigma]=normfit(testdata);% 估计正态参数
+    p1=normcdf(testdata,mu,sigma);% 作累积分布x
+    [H1,s1]=kstest(testdata,[testdata,p1],alpha);%ks检验
+    if(H1==1)
+       disp(['第',num2str(i),'类拒绝正态分布假设;']);
+    else
+       disp(['第',num2str(i),'类不拒绝正态分布假设;']);
+    end
+end
+p = vartestn(AGE,Category) % 进行方差齐性检验
+if(p<alpha)
+   disp(['不满足方差齐性']);
+end
+
+ p=anova1(AGE,Category) % 进行单因素方差分析
+if(p<alpha)
+   disp(['拒绝H0假设']);
+end
+
+
+
+
+% data=AGE;
+% [mu,sigma]=normfit(data);
+% [y,x]=hist(data,35);
+% bar(x,y,'FaceColor','r','EdgeColor','w');box off
+% xlim([mu-3*sigma,mu+3*sigma])
+% a2=axes;
+% ezplot(@(x)normpdf(x,mu,sigma),[mu-3*sigma,mu+3*sigma])
+% set(a2,'box','off','yaxislocation','right','color','none')
+% title( '频数直方图与密度函数');
+
+
+
+
+##### SOURCE END #####
+--></body></html>
